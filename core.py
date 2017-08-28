@@ -202,34 +202,3 @@ class SoulReaper(Fighter):
         if self.rage <= 25:
             actions.append('r')
         return actions
-
-
-class Battle:
-    """ list of figthers to take part in a free for all battle """
-
-    def __init__(self, fighters):
-        '([Fighters]) -> None'
-        self.fighters = fighters
-
-    def __str__(self):
-        return '\n'.join(map(str, self.fighters))
-
-    def is_dead(self, warrior):
-        self.fighters = list(filter(lambda f: f.health > 0, self.fighters))
-        for fighter in self.fighters:
-            if warrior == fighter:
-                if fighter.health <= 0:
-                    self.fighters.remove(fighter)
-                    return True
-
-    def get_target(self, warrior_name):
-        for fighter in self.fighters:
-            if fighter.name == warrior_name:
-                return fighter
-
-    def get_opponents(self, warrior_name):
-        opponents = []
-        for warrior in self.fighters:
-            if warrior != warrior_name:
-                opponents.append[warrior.name]
-        return opponents

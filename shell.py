@@ -10,10 +10,10 @@ def cpu_choice(choices, action):
             return action
 
 
-def my_choices(choices):
+def my_choices(choices, action_string):
     while True:
-        choice = input('\n-- '.join(choices[1]))
-        if choice in choices[1]:
+        choice = input(action_string)
+        if choice in choices:
             return choice
         else:
             print('invalid choice')
