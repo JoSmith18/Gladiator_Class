@@ -1,4 +1,11 @@
-from random import randint
+from random import randint, choice
+from termcolor import colored, cprint
+
+
+def get_class():
+    classes = [Ninja, SoulReaper, Saiyan]
+    class_type = choice(classes)
+    return class_type
 
 
 def damage_finder(a, b):
@@ -55,28 +62,22 @@ class Fighter:
                                                       self.rage)
 
     def get_choice(self, other, decision):
-        if decision.title().strip() == 'attack'.title().strip(
-        ) or decision.title().strip() == 'a'.title().strip():
+        if decision.title().strip() == 'a'.title().strip():
             message = self.attack(other)
             return message
-        elif decision.title().strip() == 'heal'.title().strip(
-        ) or decision.title().strip() == 'h'.title().strip():
+        elif decision.title().strip() == 'h'.title().strip():
             message = self.heal()
             return message
-        elif decision.title().strip() == 'transform'.title().strip(
-        ) or decision.title().strip() == 't'.title().strip():
+        elif decision.title().strip() == 't'.title().strip():
             message = self.transform()
             return message
-        elif decision.title().strip() == 'skip'.title().strip(
-        ) or decision.title().strip() == 's'.title().strip():
+        elif decision.title().strip() == 's'.title().strip():
             message = self.skip()
             return message
-        elif decision.title().strip() == 'jutsu'.title().strip(
-        ) or decision.title().strip() == 'j'.title().strip():
+        elif decision.title().strip() == 'j'.title().strip():
             message = self.jutsu(other)
             return message
-        elif decision.title().strip() == 'rampage'.title().strip(
-        ) or decision.title().strip() == 'r'.title().strip():
+        elif decision.title().strip() == 'r'.title().strip():
             message = self.hollow_form()
             return message
 
@@ -93,7 +94,8 @@ class Saiyan(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
-        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>'
+        self.action_string = colored(
+            '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>', 'red')
 
     def __str__(self):
         return 'Saiyan {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -111,7 +113,7 @@ class Saiyan(Fighter):
             self.damage_high += 10
             self.damage_low += 10
             self.rage = 20
-            message = 'You Transformed To A Super Saiyan'
+            message = 'Wow That Is A New Level'
             return message
         return message
 
@@ -131,7 +133,8 @@ class Ninja(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
-        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>'
+        self.action_string = colored(
+            '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>', 'red')
 
     def __str__(self):
         return 'Ninja {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -158,7 +161,7 @@ class Ninja(Fighter):
         actions = ['a', 's']
         if self.rage >= 10:
             actions.append('h')
-        if self.rage >= 80:
+        if self.rage >= 50:
             actions.append('j')
         return actions
 
@@ -170,7 +173,8 @@ class SoulReaper(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
-        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>'
+        self.action_string = colored(
+            '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>', 'red')
 
     def __str__(self):
         return 'SoulReaper {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -195,6 +199,37 @@ class SoulReaper(Fighter):
         actions = ['a', 's']
         if self.rage >= 10:
             actions.append('h')
-        if self.health <= 25:
+        if self.rage <= 25:
             actions.append('r')
         return actions
+
+
+class Battle:
+    """ list of figthers to take part in a free for all battle """
+
+    def __init__(self, fighters):
+        '([Fighters]) -> None'
+        self.fighters = fighters
+
+    def __str__(self):
+        return '\n'.join(map(str, self.fighters))
+
+    def is_dead(self, warrior):
+        self.fighters = list(filter(lambda f: f.health > 0, self.fighters))
+        for fighter in self.fighters:
+            if warrior == fighter:
+                if fighter.health <= 0:
+                    self.fighters.remove(fighter)
+                    return True
+
+    def get_target(self, warrior_name):
+        for fighter in self.fighters:
+            if fighter.name == warrior_name:
+                return fighter
+
+    def get_opponents(self, warrior_name):
+        opponents = []
+        for warrior in self.fighters:
+            if warrior != warrior_name:
+                opponents.append[warrior.name]
+        return opponents

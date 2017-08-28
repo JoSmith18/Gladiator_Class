@@ -1,15 +1,38 @@
 import sys
 from termcolor import colored, cprint
-from core import damage_finder, Fighter, Saiyan, Ninja, SoulReaper
+from core import damage_finder, Fighter, Saiyan, Ninja, SoulReaper, get_class
+from random import choice
 
 
-def my_choices(choices, action_string):
+def cpu_choice(choices, action):
     while True:
-        choice = input(action_string)
-        if choice in choices:
+        if action in choices:
+            return action
+
+
+def my_choices(choices):
+    while True:
+        choice = input('\n-- '.join(choices[1]))
+        if choice in choices[1]:
             return choice
         else:
             print('invalid choice')
+
+
+def get_cpu():
+    class_type = get_class()
+    damage_low, damage_high = damage_finder(10, 25)
+    if class_type == Saiyan:
+        name = choice(['Goku', 'Trunks', 'Gohan', 'Goten', 'Vegeta'])
+        fighter = Saiyan(name, damage_low, damage_high)
+    elif class_type == Ninja:
+        name = choice(['Naruto', 'Sasuke', 'Kakashi', 'Rock Lee', 'Sakura'])
+        fighter = Ninja(name, damage_low, damage_high)
+    elif class_type == SoulReaper:
+        name = choice(['Ichigo', 'Rukia', 'Aizen'])
+        fighter = SoulReaper(name, damage_low, damage_high)
+    cprint(fighter, 'green', 'on_grey')
+    return fighter
 
 
 def get_fighter(text_color, bg_color):
@@ -36,9 +59,9 @@ def get_fighter(text_color, bg_color):
     return fighter
 
 
-def main():
+def fighter_vs_fighter():
     fighter1 = get_fighter('red', 'on_grey')
-    fighter2 = get_fighter('yellow', 'on_grey')
+    fighter2 = get_fighter('blue', 'on_grey')
     hits = 0
     while True:
         cprint(repr(fighter1), fighter1.text_color)
@@ -58,6 +81,41 @@ def main():
             exit()
 
         print('{}\n{}\n'.format(repr(fighter1), repr(fighter2)))
+
+
+def fighter_vs_cpu():
+    fighter1 = get_fighter('yellow', 'on_grey')
+    cpu = get_cpu()
+    while True:
+        cprint(repr(fighter1), fighter1.text_color)
+        decisions = my_choices(fighter1.possible_actions(),
+                               fighter1.action_string)
+        cprint(fighter1.get_choice(cpu, decisions), 'blue', 'on_yellow')
+        if Fighter.is_dead(cpu):
+            print('{} WINS!!'.format(fighter1.name))
+            exit()
+
+        cprint(repr(cpu), 'cyan')
+        actions = cpu.possible_actions()
+        decisions = cpu_choice(cpu.possible_actions(), choice(actions))
+        cprint(cpu.get_choice(fighter1, decisions), 'yellow', 'on_blue')
+        if Fighter.is_dead(fighter1):
+            print('{} WINS!!'.format(cpu.name))
+            exit()
+        print(colored('{}\n{}\n', 'magenta').format(repr(fighter1), repr(cpu)))
+
+
+def main():
+    while True:
+        mode = input(
+            colored('\tWill it Be:\n1) Vs Cpu\n2) Vs Player2\n', 'green',
+                    'on_grey'))
+        if mode == '1':
+            fighter_vs_cpu()
+        elif mode == '2':
+            fighter_vs_fighter()
+        else:
+            print('Invalid Choice!!!!')
 
 
 if __name__ == '__main__':
