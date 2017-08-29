@@ -95,7 +95,8 @@ class Saiyan(Fighter):
         self.damage_low = damage_low
         self.damage_high = damage_high
         self.action_string = colored(
-            '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>', 'red')
+            '-- [a]ttack\n-- [h]eal-*Must Have 10 Rage\n-- [t]ransform-*Must Have 80 Rage\n-- [s]kip-*Adds 30 Rage\n>>>',
+            'red')
 
     def __str__(self):
         return 'Saiyan {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -134,7 +135,8 @@ class Ninja(Fighter):
         self.damage_low = damage_low
         self.damage_high = damage_high
         self.action_string = colored(
-            '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>', 'red')
+            '-- [a]ttack\n-- [h]eal-*Must Have 10 Rage\n-- [j]utsu-*Must Have 50 Rage\n-- [s]kip-*Adds 30 Rage\n>>>',
+            'red')
 
     def __str__(self):
         return 'Ninja {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -153,7 +155,7 @@ class Ninja(Fighter):
             self.damage_low += 5
             self.rage = 10
             other.health -= self.damage_high
-            message = 'Your Jutsu Was Succesful'
+            message = 'Your Jutsu Took {} Damage!!'.format(self.damage_high)
             return message
         return message
 
@@ -174,7 +176,8 @@ class SoulReaper(Fighter):
         self.damage_low = damage_low
         self.damage_high = damage_high
         self.action_string = colored(
-            '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>', 'red')
+            '-- [a]ttack\n-- [h]eal-*Must Have 10 Rage\n-- [r]ampage-*Health Has To Be 25 or Lower\n-- [s]kip-*Adds 30 Rage\n>>>',
+            'red')
 
     def __str__(self):
         return 'SoulReaper {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
